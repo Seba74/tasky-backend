@@ -13,56 +13,107 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
-const user_1 = require("../models/user");
 const role_1 = require("../models/role");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const jwt_config_1 = __importDefault(require("../jwt/jwt.config"));
+const user_repository_1 = require("../repositories/implementation/user.repository");
+const auth_repository_1 = require("../repositories/implementation/auth.repository");
 class AuthService {
-    login(user) {
+    login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userDB = yield user_1.UserModel.findOne({ email: user.email });
-            if (!userDB) {
-                throw new Error("User not found");
+            try {
+                const { email, password } = req.body;
+                if (!email || !password)
+                    return res
+                        .status(400)
+                        .json({ message: "Email y contraseña requeridos" });
+                const userDto = yield user_repository_1.UserRepository.prototype.getUserByEmail(email);
+                if (!userDto)
+                    throw new Error("Usuario o contraseña incorrecta");
+                const loginUser = {
+                    email,
+                    password,
+                };
+                const token = yield auth_repository_1.AuthRepository.prototype.login(loginUser);
+                if (!token)
+                    return res
+                        .status(400)
+                        .json({ message: "Usuario o contraseña incorrecta" });
+                const authResponse = {
+                    token,
+                    user: userDto,
+                    message: "Login exitoso",
+                };
+                res.status(200).json(authResponse);
             }
-            if (!userDB.comparePassword(user.password)) {
-                throw new Error("Password is incorrect");
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: error.message });
             }
-            const token = jwt_config_1.default.getJwtToken({
-                _id: userDB._id,
-                username: userDB.name,
-                email: userDB.email,
-                idRole: userDB.idRole,
-            });
-            return token;
         });
     }
-    register(user) {
+    register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userDB = yield user_1.UserModel.findOne({ email: user.email });
-            if (userDB) {
-                throw new Error("User already exists");
+            try {
+                const { name, lastname, username, email, password } = req.body;
+                if (!name || !username || !email || !password || !lastname) {
+                    return res.status(400).json({
+                        message: "Todos los campos son requeridos",
+                    });
+                }
+                const userEmailExists = yield user_repository_1.UserRepository.prototype.emailExists(email);
+                if (userEmailExists)
+                    return res.status(400).json({ message: "El email ya está registrado" });
+                const userUsernameExists = yield user_repository_1.UserRepository.prototype.usernameExists(username);
+                if (userUsernameExists)
+                    return res
+                        .status(400)
+                        .json({ message: "El username ya está registrado" });
+                const userRole = yield role_1.RoleModel.findOne({ name: "user" });
+                if (!userRole)
+                    return res.status(500).json({ message: "No se pudo crear el usuario" });
+                // hash password
+                const salt = bcrypt_1.default.genSaltSync();
+                const hashPassword = bcrypt_1.default.hashSync(password, salt);
+                const user = {
+                    name,
+                    lastname,
+                    username,
+                    email,
+                    password: hashPassword,
+                    idRole: userRole._id,
+                };
+                const token = yield auth_repository_1.AuthRepository.prototype.register(user);
+                if (!token)
+                    return res.status(500).json({ message: "No se pudo crear el usuario" });
+                const authResponse = {
+                    token,
+                    user: yield user_repository_1.UserRepository.prototype.getUserByEmail(email),
+                    message: "Usuario creado exitosamente",
+                };
+                res.json(authResponse);
             }
-            const role = yield role_1.RoleModel.findOne({ name: "user" });
-            if (!role) {
-                throw new Error("Role not found");
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: error.message });
             }
-            const salt = bcrypt_1.default.genSaltSync();
-            const savePassword = bcrypt_1.default.hashSync(user.password, salt);
-            const userToCreate = {
-                name: user.name,
-                username: user.username,
-                email: user.email,
-                password: savePassword,
-                idRole: role._id,
-            };
-            const newUser = yield user_1.UserModel.create(userToCreate);
-            const token = jwt_config_1.default.getJwtToken({
-                _id: newUser._id,
-                username: newUser.name,
-                email: newUser.email,
-                idRole: newUser.idRole,
-            });
-            return token;
+        });
+    }
+    validateToken(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userToken = req.headers["authorization"] || "";
+                if (!userToken)
+                    return res.status(400).json({ message: "Token no válido" });
+                const token = userToken.split(" ")[1];
+                const newToken = yield auth_repository_1.AuthRepository.prototype.validateToken(token);
+                if (!newToken)
+                    return res.status(400).json({ message: "Token no válido" });
+                res.json({ token });
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: error.message });
+            }
         });
     }
 }

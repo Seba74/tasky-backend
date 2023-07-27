@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
-
+import "dotenv/config";
 export default class Token {
-  private static seed: string = "tasky-jwt-secret_seed"
-  private static expired: string = "24h";
+  private static seed: string = process.env.TOKEN || "tasky-jwt-secret_seed";
+  private static expired: string = "30d";
   constructor() {}
 
-  static getJwtToken(payload: any): string {
+  static async createJwtToken(payload: any): Promise<string> {
     return jwt.sign(
       {
         user: payload,
@@ -15,15 +15,13 @@ export default class Token {
     );
   }
 
-  static checkToken(userToken: string) {
+  static async validateToken(token: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      jwt.verify(userToken, this.seed, (err, decoded) => {
-        if (err) {
-          // Invalid token
-          reject();
+      jwt.verify(token, this.seed, (error, decoded) => {
+        if (error) {
+          reject(false);
         } else {
-          // Valid token
-          resolve(decoded);
+          resolve(this.createJwtToken(decoded));
         }
       });
     });

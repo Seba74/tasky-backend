@@ -4,7 +4,8 @@ export interface Task extends Document {
   title: string;
   description: string;
   deadline: Date;
-  idProject: Schema.Types.ObjectId;
+  idDate: string;
+  idUser: Schema.Types.ObjectId;
   idPriority: Schema.Types.ObjectId;
 }
 
@@ -28,9 +29,16 @@ const taskSchema = new Schema(
       required: true,
     },
 
-    idProject: {
+    idDate: {
+      type: String,
+      unique: true,
+      trim: true,
+      required: true,
+    },
+
+    idUser: {
       type: Schema.Types.ObjectId,
-      ref: "Project",
+      ref: "User",
       required: true,
     },
 

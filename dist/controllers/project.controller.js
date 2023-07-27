@@ -9,34 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProjectController = void 0;
-const projectService_1 = require("../services/projectService");
-const projectPerUserService_1 = require("../services/projectPerUserService");
+exports.TaskController = void 0;
 const userService_1 = require("../services/userService");
-class ProjectController {
-    getProjectsByUserId(req, res) {
+class TaskController {
+    constructor(taskService, userService) {
+        this.taskService = taskService;
+        this.userService = userService;
+    }
+    getTasksByUserId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idUser } = req.params;
                 if (!idUser) {
-                    throw new Error("Missing fields");
+                    throw new Error("Faltan campos por completar");
                 }
-                const user = yield userService_1.UserService.prototype.getUserById(idUser);
-                if (!user) {
-                    throw new Error("User not found");
+                const userExists = yield this.userService.userExists(idUser);
+                if (!userExists) {
+                    throw new Error("El usuario no existe");
                 }
-                const projectPerUser = yield projectPerUserService_1.ProjectPerUserService.prototype.getProjectsByUserId(idUser);
-                if (!projectPerUser) {
-                    throw new Error("Project not found");
-                }
-                const projects = [];
-                for (const project of projectPerUser) {
-                    const projectFound = yield projectService_1.ProjectService.prototype.getProjectById(project.idProject.toString());
-                    if (projectFound) {
-                        projects.push(projectFound);
-                    }
-                }
-                res.status(200).json({ message: "Projects found", projects });
+                const tasks = yield this.taskService.getTasksByUserId(idUser);
+                res.status(200).json({ message: "Tareas Encontradas", tasks });
             }
             catch (error) {
                 console.error(error);
@@ -44,14 +36,14 @@ class ProjectController {
             }
         });
     }
-    getAllProjects(req, res) {
+    getAllTasks(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const projects = yield projectService_1.ProjectService.prototype.getAllProjects();
-                if (!projects) {
-                    throw new Error("Projects not found");
+                const tasks = yield this.taskService.getAllTasks();
+                if (!tasks) {
+                    throw new Error("Tareas no encontradas");
                 }
-                res.status(200).json({ message: "Projects found", projects });
+                res.status(200).json({ message: "Tareas Encontradas", tasks });
             }
             catch (error) {
                 console.error(error);
@@ -59,19 +51,23 @@ class ProjectController {
             }
         });
     }
-    updateProject(req, res) {
+    updateTask(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { idProject } = req.params;
+                const { idTask } = req.params;
                 const body = req.body;
-                if (!idProject) {
-                    throw new Error("Missing fields");
+                if (!idTask) {
+                    throw new Error("Faltan campos por completar");
                 }
-                const project = yield projectService_1.ProjectService.prototype.getProjectById(idProject);
-                if (!project) {
-                    throw new Error("Project not found");
+                const task = yield this.taskService.getTaskById(idTask);
+                if (!task) {
+                    throw new Error("La tarea no existe");
                 }
-                const projectUpdated = yield projectService_1.ProjectService.prototype.updateProject(idProject, body);
+                const taskUpdated = yield this.taskService.updateTask(idTask, body);
+                if (!taskUpdated) {
+                    throw new Error("Error al actualizar la tarea");
+                }
+                res.status(200).json({ message: "Tarea actualizada", taskUpdated });
             }
             catch (error) {
                 console.error(error);
@@ -79,10 +75,10 @@ class ProjectController {
             }
         });
     }
-    createProject(req, res) {
+    createTask(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { title, description } = req.body;
+                const { title, description, idDate, idPriority } = req.body;
                 const { idUser } = req.params;
                 if (!title || !description || !idUser) {
                     throw new Error("Missing fields");
@@ -96,12 +92,12 @@ class ProjectController {
                     description,
                     deadline: new Date(),
                 };
-                const newProject = yield projectService_1.ProjectService.prototype.createProject(project);
+                const newProject = yield ProjectService.prototype.createProject(project);
                 const projectPerUser = {
                     idProject: newProject._id,
                     idUser,
                 };
-                const newProjectPerUser = yield projectPerUserService_1.ProjectPerUserService.prototype.createProjectPerUser(projectPerUser);
+                const newProjectPerUser = yield ProjectPerUserService.prototype.createProjectPerUser(projectPerUser);
                 yield newProjectPerUser.save();
                 res.status(201).json({ message: "Project created", project: newProject });
             }
@@ -112,4 +108,4 @@ class ProjectController {
         });
     }
 }
-exports.ProjectController = ProjectController;
+exports.TaskController = TaskController;

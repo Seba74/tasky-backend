@@ -12,42 +12,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const authService_1 = require("../services/authService");
 class AuthController {
+    constructor() {
+        this.authService = new authService_1.AuthService();
+    }
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { email, password } = req.body;
-                if (!email || !password) {
-                    throw new Error("Email and password are required");
-                }
-                const token = yield authService_1.AuthService.prototype.login({ email, password });
-                res.json({
-                    ok: true,
-                    token,
-                });
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).json({ message: error.message });
-            }
+            return yield this.authService.login(req, res);
         });
     }
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { name, username, email, password } = req.body;
-                if (!name || !email || !password) {
-                    throw new Error("Name, email and password are required");
-                }
-                const token = yield authService_1.AuthService.prototype.register({ name, username, email, password });
-                res.json({
-                    ok: true,
-                    token,
-                });
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).json({ message: error.message });
-            }
+            return yield this.authService.register(req, res);
+        });
+    }
+    validateToken(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.authService.validateToken(req, res);
         });
     }
 }

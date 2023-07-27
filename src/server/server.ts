@@ -1,13 +1,14 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
-import project from "../routes/project";
 import role from "../routes/role";
 import auth from "../routes/auth";
+import task from "../routes/task";
 import cors from "cors";
 import "dotenv/config";
 
 export default class Server {
   public app: Application;
+  public api = "/api/v1/";
   public port: number = Number(process.env.PORT) || 3000;
 
   constructor() {
@@ -24,10 +25,9 @@ export default class Server {
   }
 
   private configureRoutes() {
-    this.app.use("/auth", auth);
-    // this.app.use("/user", user);
-    this.app.use("/project", project);
-    this.app.use("/role", role);
+    this.app.use(this.api + "auth", auth);
+    this.app.use(this.api + "task", task);
+    this.app.use(this.api + "role", role);
   }
 
   private configureErrorHandling() {

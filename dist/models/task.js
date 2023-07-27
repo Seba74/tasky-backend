@@ -18,9 +18,15 @@ const taskSchema = new mongoose_1.Schema({
         type: Date,
         required: true,
     },
-    idProject: {
+    idDate: {
+        type: String,
+        unique: true,
+        trim: true,
+        required: true,
+    },
+    idUser: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Project",
+        ref: "User",
         required: true,
     },
     idPriority: {

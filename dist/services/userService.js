@@ -11,7 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const user_1 = require("../models/user");
+const user_repository_1 = require("../repositories/implementation/user.repository");
 class UserService {
+    constructor() {
+        this.userRepository = new user_repository_1.UserRepository();
+    }
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield user_1.UserModel.findById(id);
@@ -22,6 +26,24 @@ class UserService {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield user_1.UserModel.findOne({ email });
             return user;
+        });
+    }
+    emailExists(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_1.UserModel.findOne({ email });
+            if (user) {
+                return true;
+            }
+            return false;
+        });
+    }
+    usernameExists(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_1.UserModel.findOne({ username });
+            if (user) {
+                return true;
+            }
+            return false;
         });
     }
 }
