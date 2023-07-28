@@ -1,37 +1,39 @@
-// TaskBodyDto
-export interface TaskBodyDto {
+import { PriorityDto } from "./priority.dto";
+import { UserDto } from "./user.dto";
+
+export interface TaskDataDto {
     title: string;
-    description: string;
+    description?: string;
     idDate: string;
-    codePriority: number;
     deadline: Date;
 }
-
 
 // create dto
 export interface CreateTaskDto {
     title: string;
-    description: string;
+    description?: string;
     idDate: string;
-    idPriority: string;
     deadline: Date;
+    idPriority: any;
+    idUser: any;
 }
 
 // update dto
 export interface UpdateTaskDto {
     title: string;
-    description: string;
-    idPriority: string;
+    description?: string;
+    idDate: string;
     deadline: Date;
+    idPriority: any;
+    idUser: any;
 }
-
 
 export interface TaskDto {
     _id?: any;
     title: string;
-    description: string;
+    description?: string;
     idDate: string;
-    idPriority: string;
     deadline: Date;
-    user: any;
+    priority: PriorityDto;
+    user: UserDto;
 }

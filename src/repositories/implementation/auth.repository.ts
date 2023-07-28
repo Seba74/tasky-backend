@@ -43,6 +43,7 @@ export class AuthRepository implements AuthRepositoryInterface {
   }
 
   public async validateToken(userToken: string): Promise<string | null> {
-    return Token.validateToken(userToken);
+    const newToken = await Token.validateToken(userToken);
+    return newToken;
   }
 }

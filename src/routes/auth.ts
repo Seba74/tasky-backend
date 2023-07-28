@@ -1,15 +1,28 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/auth.controller";
-import { AuthService } from "../services/authService";
+import {
+  loginValidator,
+  registerValidator,
+} from "../validators/auth.validator";
 
 const router = Router();
 const authController = new AuthController();
 
+router.post(
+  "/login",
+  loginValidator,
+  authController.login.bind(authController)
+);
 
-router.post("/login", AuthService.prototype.login);
+router.post(
+  "/register",
+  registerValidator,
+  authController.register.bind(authController)
+);
 
-router.post("/register", AuthService.prototype.register);
-
-router.get("/validate-token", AuthService.prototype.validateToken);
+router.get(
+  "/validate-token",
+  authController.validateToken.bind(authController)
+);
 
 export default router;

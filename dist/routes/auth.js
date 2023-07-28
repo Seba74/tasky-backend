@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_controller_1 = require("../controllers/auth.controller");
-const authService_1 = require("../services/authService");
+const auth_validator_1 = require("../validators/auth.validator");
 const router = (0, express_1.Router)();
 const authController = new auth_controller_1.AuthController();
-router.post("/login", authService_1.AuthService.prototype.login);
-router.post("/register", authService_1.AuthService.prototype.register);
-router.get("/validate-token", authService_1.AuthService.prototype.validateToken);
+router.post("/login", auth_validator_1.loginValidator, authController.login.bind(authController));
+router.post("/register", auth_validator_1.registerValidator, authController.register.bind(authController));
+router.get("/validate-token", authController.validateToken.bind(authController));
 exports.default = router;

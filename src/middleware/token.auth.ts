@@ -1,5 +1,7 @@
 import { Response, NextFunction } from "express";
 import Token from "../jwt/jwt.config";
+import jwt from 'jsonwebtoken';
+import "dotenv/config";
 
 export const tokenAuthMiddleware = (
   req: any,
@@ -24,6 +26,17 @@ export const tokenAuthMiddleware = (
       message: "Unauthorized",
     });
   }
+  const seed: string = process.env.TOKEN || "seed";
 
+  const decoded = jwt.verify(justToken, seed);
+
+  if (typeof decoded === "string") {
+    return res.status(401).json({
+      ok: false,
+      message: "Unauthorized",
+    });
+  }
+
+  req.user = decoded.user;
   next();
 };

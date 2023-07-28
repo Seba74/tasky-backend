@@ -31,7 +31,8 @@ class Token {
                         reject(false);
                     }
                     else {
-                        resolve(this.createJwtToken(decoded));
+                        const newToken = this.createJwtToken(decoded);
+                        resolve(newToken);
                     }
                 });
             });

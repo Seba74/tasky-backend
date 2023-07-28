@@ -17,7 +17,7 @@ class UserRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield user_1.UserModel.findById(id);
             if (!user)
-                throw new Error("El usuario no existe");
+                throw new Error("No se encontró el usuario");
             const userDto = {
                 _id: user._id.transform.toString(),
                 name: user.name,
@@ -33,7 +33,7 @@ class UserRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield user_1.UserModel.findOne({ username });
             if (!user)
-                throw new Error("El usuario no existe");
+                throw new Error("No se encontró el usuario");
             const userDto = {
                 _id: user._id,
                 name: user.name,
@@ -49,7 +49,7 @@ class UserRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield user_1.UserModel.findOne({ email });
             if (!user)
-                throw new Error("El usuario no existe");
+                throw new Error("No existe un usuario con ese email");
             const userDto = {
                 _id: user._id,
                 name: user.name,

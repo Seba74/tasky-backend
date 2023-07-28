@@ -1,9 +1,14 @@
+// EXPRESS AND CONFIGURATIONS
 import express, { Application, Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
+// ROUTES
 import role from "../routes/role";
 import auth from "../routes/auth";
 import task from "../routes/task";
+import priority from "../routes/priority";
+// CORS
 import cors from "cors";
+// VARIABLES
 import "dotenv/config";
 
 export default class Server {
@@ -28,6 +33,7 @@ export default class Server {
     this.app.use(this.api + "auth", auth);
     this.app.use(this.api + "task", task);
     this.app.use(this.api + "role", role);
+    this.app.use(this.api + "priority", priority);
   }
 
   private configureErrorHandling() {

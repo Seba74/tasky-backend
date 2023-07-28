@@ -21,7 +21,8 @@ export default class Token {
         if (error) {
           reject(false);
         } else {
-          resolve(this.createJwtToken(decoded));
+          const newToken = this.createJwtToken(decoded);
+          resolve(newToken);
         }
       });
     });

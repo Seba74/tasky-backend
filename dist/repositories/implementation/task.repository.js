@@ -11,107 +11,109 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskRepository = void 0;
 const task_1 = require("../../models/task");
-const user_1 = require("../../models/user");
 class TaskRepository {
-    createTask(idUser, createTaskDto) {
+    createTask(createTaskDto) {
         return __awaiter(this, void 0, void 0, function* () {
-            const task = yield task_1.TaskModel.create(Object.assign(Object.assign({}, createTaskDto), { idUser }));
+            const task = yield task_1.TaskModel.create(createTaskDto);
+            yield task.populate("idPriority");
+            yield task.populate("idUser", "-password");
             const taskDto = {
                 _id: task._id,
                 title: task.title,
                 description: task.description,
                 deadline: task.deadline,
                 idDate: task.idDate,
-                idPriority: task.idPriority.transform.toString(),
-                user: user_1.UserModel.findById(task.idUser).select("-password"),
+                priority: task.idPriority,
+                user: yield task.idUser.populate("idRole"),
             };
             return taskDto;
         });
     }
     getAllTasks() {
         return __awaiter(this, void 0, void 0, function* () {
-            const tasks = yield task_1.TaskModel.find();
-            const tasksDto = tasks.map((task) => {
-                return {
+            const tasks = yield task_1.TaskModel.find().populate("idPriority").populate("idUser", "-password");
+            const tasksDto = tasks.map((task) => __awaiter(this, void 0, void 0, function* () {
+                const taskDto = {
                     _id: task._id,
                     title: task.title,
                     description: task.description,
                     deadline: task.deadline,
                     idDate: task.idDate,
-                    idPriority: task.idPriority.transform.toString(),
-                    user: user_1.UserModel.findById(task.idUser).select("-password"),
+                    priority: task.idPriority,
+                    user: yield task.idUser.populate("idRole"),
                 };
-            });
-            return tasksDto;
+                return taskDto;
+            }));
+            return Promise.all(tasksDto);
         });
     }
     getTasksByUserId(idUser) {
         return __awaiter(this, void 0, void 0, function* () {
-            const tasks = yield task_1.TaskModel.find({ idUser });
-            const tasksDto = tasks.map((task) => {
-                return {
-                    _id: task._id.transform.toString(),
+            const tasks = yield task_1.TaskModel.find({ idUser }).populate("idPriority").populate("idUser", "-password");
+            const tasksDto = tasks.map((task) => __awaiter(this, void 0, void 0, function* () {
+                const taskDto = {
+                    _id: task._id,
                     title: task.title,
                     description: task.description,
                     deadline: task.deadline,
                     idDate: task.idDate,
-                    idPriority: task.idPriority.transform.toString(),
-                    user: user_1.UserModel.findById(task.idUser).select("-password"),
+                    priority: task.idPriority,
+                    user: yield task.idUser.populate("idRole"),
                 };
-            });
-            return tasksDto;
+                return taskDto;
+            }));
+            return Promise.all(tasksDto);
         });
     }
     getTaskById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const task = yield task_1.TaskModel.findById(id);
-            if (!task) {
+            if (!task)
                 throw new Error("La tarea no existe");
-            }
+            yield task.populate("idPriority");
+            yield task.populate("idUser", "-password");
             const taskDto = {
-                _id: task._id.transform.toString(),
+                _id: task._id,
                 title: task.title,
                 description: task.description,
                 deadline: task.deadline,
                 idDate: task.idDate,
-                idPriority: task.idPriority.transform.toString(),
-                user: user_1.UserModel.findById(task.idUser).select("-password"),
+                priority: task.idPriority,
+                user: yield task.idUser.populate("idRole"),
             };
             return taskDto;
         });
     }
     updateTask(id, updateTaskDto) {
         return __awaiter(this, void 0, void 0, function* () {
-            const updatedTask = yield task_1.TaskModel.findByIdAndUpdate(id, updateTaskDto, { new: true });
-            if (!updatedTask) {
+            const updatedTask = yield task_1.TaskModel.findByIdAndUpdate(id, updateTaskDto, { new: true }).populate("idPriority").populate("idUser", "-password");
+            if (!updatedTask)
                 throw new Error("Error al actualizar la tarea");
-            }
             const taskDto = {
-                _id: updatedTask._id.transform.toString(),
+                _id: updatedTask._id,
                 title: updatedTask.title,
                 description: updatedTask.description,
                 deadline: updatedTask.deadline,
                 idDate: updatedTask.idDate,
-                user: user_1.UserModel.findById(updatedTask.idUser).select("-password"),
-                idPriority: updatedTask.idPriority.transform.toString(),
+                priority: updatedTask.idPriority,
+                user: yield updatedTask.idUser.populate("idRole"),
             };
             return taskDto;
         });
     }
     deleteTask(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const deletedTask = yield task_1.TaskModel.findByIdAndDelete(id);
-            if (!deletedTask) {
+            const deletedTask = yield task_1.TaskModel.findByIdAndDelete(id).populate("idPriority").populate("idUser", "-password");
+            if (!deletedTask)
                 throw new Error("Error al eliminar la tarea");
-            }
             const taskDto = {
-                _id: deletedTask._id.transform.toString(),
+                _id: deletedTask._id,
                 title: deletedTask.title,
                 description: deletedTask.description,
                 deadline: deletedTask.deadline,
                 idDate: deletedTask.idDate,
-                user: user_1.UserModel.findById(deletedTask.idUser).select("-password"),
-                idPriority: deletedTask.idPriority.transform.toString(),
+                priority: deletedTask.idPriority,
+                user: yield deletedTask.idUser.populate("idRole"),
             };
             return taskDto;
         });

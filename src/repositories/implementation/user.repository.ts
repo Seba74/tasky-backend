@@ -5,10 +5,10 @@ import { UserDto } from "../../dtos/user.dto";
 
 export class UserRepository implements UserRepositoryInterface {
   
-  public async getUserById(id: string): Promise<UserDto> {
+  public async getUserById(id: any): Promise<UserDto> {
     
     const user: User | null = await UserModel.findById(id);
-    if (!user) throw new Error("El usuario no existe");
+    if (!user) throw new Error("No se encontró el usuario");
 
     const userDto: UserDto = {
       _id: user._id.transform.toString(),
@@ -24,7 +24,7 @@ export class UserRepository implements UserRepositoryInterface {
 
   public async getUserByUsername(username: string): Promise<UserDto> {
     const user: User | null = await UserModel.findOne({ username });
-    if (!user) throw new Error("El usuario no existe");
+    if (!user) throw new Error("No se encontró el usuario");
 
     const userDto: UserDto = {
       _id: user._id,
@@ -40,7 +40,7 @@ export class UserRepository implements UserRepositoryInterface {
 
   public async getUserByEmail(email: string): Promise<UserDto> {
     const user: User | null = await UserModel.findOne({ email });
-    if (!user) throw new Error("El usuario no existe");
+    if (!user) throw new Error("No existe un usuario con ese email");
 
     const userDto: UserDto = {
       _id: user._id,

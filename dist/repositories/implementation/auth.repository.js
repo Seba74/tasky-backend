@@ -55,7 +55,8 @@ class AuthRepository {
     }
     validateToken(userToken) {
         return __awaiter(this, void 0, void 0, function* () {
-            return jwt_config_1.default.validateToken(userToken);
+            const newToken = yield jwt_config_1.default.validateToken(userToken);
+            return newToken;
         });
     }
 }

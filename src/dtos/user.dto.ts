@@ -1,11 +1,10 @@
-import { Role } from "../models/role";
-
+import { RoleDto } from "./role.dto";
 export interface UserDto {
-    _id?: string;
+    _id?: any;
     name: string;
     lastname: string;
     username: string;
     email: string;
-    role: Role | null; 
+    idRole?: RoleDto | null; 
 }
 

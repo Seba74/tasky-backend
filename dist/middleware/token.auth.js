@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tokenAuthMiddleware = void 0;
 const jwt_config_1 = __importDefault(require("../jwt/jwt.config"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+require("dotenv/config");
 const tokenAuthMiddleware = (req, res, next) => {
     const token = req.headers["authorization"];
     if (!token) {
@@ -21,6 +23,15 @@ const tokenAuthMiddleware = (req, res, next) => {
             message: "Unauthorized",
         });
     }
+    const seed = process.env.TOKEN || "seed";
+    const decoded = jsonwebtoken_1.default.verify(justToken, seed);
+    if (typeof decoded === "string") {
+        return res.status(401).json({
+            ok: false,
+            message: "Unauthorized",
+        });
+    }
+    req.user = decoded.user;
     next();
 };
 exports.tokenAuthMiddleware = tokenAuthMiddleware;

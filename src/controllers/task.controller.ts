@@ -1,4 +1,6 @@
-import { TaskService } from "../services/taskService";
+import { CommonResponse } from "../dtos/common.dto";
+import { CreateTaskDto, UpdateTaskDto } from "../dtos/task.dto";
+import { TaskService } from "../services/task.service";
 import { Request, Response } from "express";
 
 export class TaskController {
@@ -7,27 +9,96 @@ export class TaskController {
     this.taskService = new TaskService();
   }
 
+  public async getTaskById(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const taskResponse: CommonResponse = await this.taskService.getTaskById(id);
+      return res.status(200).json(taskResponse);
+    }catch (error: any) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        message: error.message,
+      });
+    }
+  }
+
+  public async getTasksByUser(req: Request, res: Response) {
+    try{
+      const { idUser } = req.params;
+
+      const taskResponse : CommonResponse = await this.taskService.getTasksByUser(idUser);
+
+      return res.status(200).json(taskResponse);
+    }catch (error: any) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        message: error.message,
+      });
+    }
+  }
+
+  public async getAllTasks(_req: Request, res: Response) {
+    try{
+      const taskResponse: CommonResponse = await this.taskService.getAllTasks();
+      return res.status(200).json(taskResponse);
+    }catch (error: any) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        message: error.message,
+      });
+    }
+  }
+
   public async createTask(req: Request, res: Response) {
-    return await this.taskService.createTask(req, res);
+    try{
+      
+      const { title, description, deadline, idDate, idPriority, idUser} = req.body;
+      const newTask : CreateTaskDto = { title, description, deadline, idDate, idPriority, idUser};
+      const taskResponse : CommonResponse = await this.taskService.createTask(newTask);
+      
+      return res.status(200).json(taskResponse);
+    }catch (error: any) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        message: error.message,
+      });
+    }
   }
 
   public async updateTask(req: Request, res: Response) {
-    return await this.taskService.updateTask(req, res);
+    try{
+      const { id } = req.params;
+      const data = req.body;
+
+      const taskResponse : CommonResponse = await this.taskService.updateTask(id, data);
+      return res.status(200).json(taskResponse);
+    }catch (error: any) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        message: error.message,
+      });
+    }
   }
 
   public async deleteTask(req: Request, res: Response) {
-    return await this.taskService.deleteTask(req, res);
-  }
+    try{
+      const { id } = req.params;
 
-  public async getTasksByUserId(req: Request, res: Response) {
-    return await this.taskService.getTasksByUser(req, res);
-  }
+      const taskResponse : CommonResponse = await this.taskService.deleteTask(id);
 
-  public async getAllTasks(req: Request, res: Response) {
-    return await this.taskService.getAllTasks(req, res);
-  }
-
-  public async getTaskById(req: Request, res: Response) {
-    return await this.taskService.getTaskById(req, res);
+      return res.status(200).json(taskResponse);
+    }catch (error: any) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        message: error.message,
+      });
+    }
   }
 }

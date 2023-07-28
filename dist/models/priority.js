@@ -9,6 +9,14 @@ const prioritySchema = new mongoose_1.Schema({
         trim: true,
         maxlength: 50,
     },
+    level: {
+        type: Number,
+        required: true,
+        trim: true,
+        maxlength: 1,
+        min: 1,
+        unique: true,
+    },
 }, {
     timestamps: true,
     versionKey: false,

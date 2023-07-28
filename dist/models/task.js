@@ -20,8 +20,6 @@ const taskSchema = new mongoose_1.Schema({
     },
     idDate: {
         type: String,
-        unique: true,
-        trim: true,
         required: true,
     },
     idUser: {

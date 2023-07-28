@@ -10,24 +10,68 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
-const authService_1 = require("../services/authService");
+const auth_service_1 = require("../services/auth.service");
 class AuthController {
     constructor() {
-        this.authService = new authService_1.AuthService();
+        this.authService = new auth_service_1.AuthService();
     }
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.authService.login(req, res);
+            try {
+                const { email, password } = req.body;
+                const loginData = { email, password };
+                const authResponse = yield this.authService.login(loginData);
+                return res.status(200).json({
+                    ok: true,
+                    authResponse
+                });
+            }
+            catch (error) {
+                return res.status(500).json({
+                    ok: false,
+                    message: error.message
+                });
+            }
         });
     }
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.authService.register(req, res);
+            try {
+                const { name, lastname, username, email, password } = req.body;
+                const registerData = { name, lastname, username, email, password, idRole: '' };
+                const authResponse = yield this.authService.register(registerData);
+                return res.status(200).json({
+                    ok: true,
+                    authResponse
+                });
+            }
+            catch (error) {
+                return res.status(500).json({
+                    ok: false,
+                    message: error.message
+                });
+            }
         });
     }
     validateToken(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.authService.validateToken(req, res);
+            try {
+                const userToken = req.headers["authorization"] || "";
+                if (!userToken)
+                    return res.status(400).json({ message: "Token no válido" });
+                const token = userToken.split(" ")[1];
+                const newToken = yield this.authService.validateToken(token);
+                return res.status(200).json({
+                    ok: true,
+                    token: newToken
+                });
+            }
+            catch (error) {
+                return res.status(500).json({
+                    ok: false,
+                    message: error.message
+                });
+            }
         });
     }
 }
