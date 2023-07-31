@@ -6,23 +6,18 @@ export default class Token {
   constructor() {}
 
   static async createJwtToken(payload: any): Promise<string> {
-    return jwt.sign(
-      {
-        user: payload,
-      },
-      this.seed,
-      { expiresIn: this.expired }
-    );
+    return jwt.sign({ user: payload }, this.seed, { expiresIn: this.expired });
   }
 
-  static async validateToken(token: string): Promise<string> {
+  static async validateToken(token: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
-      jwt.verify(token, this.seed, (error, decoded) => {
+      jwt.verify(token, this.seed, async (error, decoded: any) => {
         if (error) {
           reject(false);
         } else {
-          const newToken = this.createJwtToken(decoded);
-          resolve(newToken);
+          const newToken = await this.createJwtToken(decoded.user);
+          const idUser: string = decoded?.user?._id;
+          resolve([newToken, idUser]);
         }
       });
     });

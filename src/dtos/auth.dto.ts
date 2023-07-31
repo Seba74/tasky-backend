@@ -1,5 +1,9 @@
-import { Role } from "../models/role";
 import { UserDto } from "./user.dto";
+
+export interface TokenValidatorDto {
+  user: UserDto | null;
+  token: string;
+}
 
 export interface LoginDto {
   email: string;
@@ -16,6 +20,7 @@ export interface RegisterDto {
 }
 
 export interface AuthResponse {
+  ok: boolean;
   token: string;
   user: UserDto;
   message: string;

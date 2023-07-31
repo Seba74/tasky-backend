@@ -26,3 +26,9 @@ export const updateTaskValidator = [
     check('id', 'El id es requerido').not().isEmpty(),
     (req: Request, res: Response, next: NextFunction) => validateResult(req, res, next)
 ];
+
+export const getUserTasksByDateValidator = [
+    check('idUser', 'El id es requerido').not().isEmpty(),
+    check('idDate', 'El id es requerido').not().isEmpty(),
+    (req: Request, res: Response, next: NextFunction) => validateResult(req, res, next)
+]

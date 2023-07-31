@@ -16,7 +16,7 @@ router.get("/:id", token_auth_1.tokenAuthMiddleware, priority_validators_1.getPr
 // Get Priority by Name
 router.get("/name/:name", token_auth_1.tokenAuthMiddleware, priority_validators_1.getPriorityByNameValidator, priorityController.getPriorityByName.bind(priorityController));
 // Get Priority by Level
-router.get("/level/:level", token_auth_1.tokenAuthMiddleware, priority_validators_1.getPriorityByLevelValidator, priorityController.getPriorityByName.bind(priorityController));
+router.get("/level/:level", token_auth_1.tokenAuthMiddleware, priority_validators_1.getPriorityByLevelValidator, priorityController.getPriorityByLevel.bind(priorityController));
 // Update Priority
 router.put("/:id", token_auth_1.tokenAuthMiddleware, isAdmin_1.isAdminMiddleware, priority_validators_1.updatePriorityValidator, priorityController.updatePriority.bind(priorityController));
 // Delete Priority

@@ -1,5 +1,4 @@
 import { UserModel, User } from "../../models/user";
-import { RoleModel } from "../../models/role";
 import { UserRepositoryInterface } from "../interfaces/user.interface";
 import { UserDto } from "../../dtos/user.dto";
 
@@ -7,50 +6,50 @@ export class UserRepository implements UserRepositoryInterface {
   
   public async getUserById(id: any): Promise<UserDto> {
     
-    const user: User | null = await UserModel.findById(id);
+    const user: User | null = await UserModel.findById(id).populate("idRole");
     if (!user) throw new Error("No se encontró el usuario");
 
-    const userDto: UserDto = {
-      _id: user._id.transform.toString(),
+    const userDto: any = {
+      _id: user._id,
       name: user.name,
       lastname: user.lastname,
       username: user.username,
       email: user.email,
-      role: await RoleModel.findById(user.idRole),
+      role: user.idRole
     }
 
     return userDto;
   }
 
   public async getUserByUsername(username: string): Promise<UserDto> {
-    const user: User | null = await UserModel.findOne({ username });
+    const user: User | null = await UserModel.findOne({ username }).populate("idRole");
     if (!user) throw new Error("No se encontró el usuario");
 
-    const userDto: UserDto = {
+    const userDto: any = {
       _id: user._id,
       name: user.name,
       lastname: user.lastname,
       username: user.username,
       email: user.email,
-      role: await RoleModel.findById(user.idRole),
+      role: user.idRole,
     }
 
     return userDto;
   }
 
   public async getUserByEmail(email: string): Promise<UserDto> {
-    const user: User | null = await UserModel.findOne({ email });
+    const user: User | null = await UserModel.findOne({ email }).populate("idRole");
     if (!user) throw new Error("No existe un usuario con ese email");
 
-    const userDto: UserDto = {
+    const userDto: any = {
       _id: user._id,
       name: user.name,
       lastname: user.lastname,
       username: user.username,
       email: user.email,
-      role: await RoleModel.findById(user.idRole),
+      role: user.idRole,
     }
-
+    console.log(userDto);
     return userDto;
   }
 

@@ -1,4 +1,4 @@
-import { LoginDto, RegisterDto } from "../../dtos/auth.dto";
+import { LoginDto, RegisterDto, TokenValidatorDto } from '../../dtos/auth.dto';
 import Token from "../../jwt/jwt.config";
 import { RoleModel } from "../../models/role";
 import { User, UserModel } from "../../models/user";
@@ -15,7 +15,7 @@ export class AuthRepository implements AuthRepositoryInterface {
       throw new Error("Usuario o contraseña incorrecta");
 
     const token = Token.createJwtToken({
-      id: user._id,
+      _id: user._id,
       username: user.name,
       email: user.email,
       role: await RoleModel.findById(user.idRole),
@@ -28,7 +28,7 @@ export class AuthRepository implements AuthRepositoryInterface {
     const user: User = await UserModel.create(registerDto);
 
     const token = Token.createJwtToken({
-      id: user._id,
+      _id: user._id,
       username: user.name,
       email: user.email,
       role: await RoleModel.findById(user.idRole),
@@ -42,8 +42,13 @@ export class AuthRepository implements AuthRepositoryInterface {
     return token;
   }
 
-  public async validateToken(userToken: string): Promise<string | null> {
-    const newToken = await Token.validateToken(userToken);
-    return newToken;
+  public async validateToken(userToken: string): Promise<TokenValidatorDto> {
+    const data = await Token.validateToken(userToken);
+    const user: any = await UserModel.findById(data[1]).populate("idRole").select("-password");
+    const tokenValidatorDto: TokenValidatorDto = {
+      token: data[0],
+      user
+    }
+    return tokenValidatorDto;
   }
 }

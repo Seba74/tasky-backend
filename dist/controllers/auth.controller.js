@@ -21,15 +21,12 @@ class AuthController {
                 const { email, password } = req.body;
                 const loginData = { email, password };
                 const authResponse = yield this.authService.login(loginData);
-                return res.status(200).json({
-                    ok: true,
-                    authResponse
-                });
+                return res.status(200).json(authResponse);
             }
             catch (error) {
                 return res.status(500).json({
                     ok: false,
-                    message: error.message
+                    message: "Correo o contraseña incorrectos",
                 });
             }
         });
@@ -38,17 +35,21 @@ class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { name, lastname, username, email, password } = req.body;
-                const registerData = { name, lastname, username, email, password, idRole: '' };
+                const registerData = {
+                    name,
+                    lastname,
+                    username,
+                    email,
+                    password,
+                    idRole: "",
+                };
                 const authResponse = yield this.authService.register(registerData);
-                return res.status(200).json({
-                    ok: true,
-                    authResponse
-                });
+                return res.status(200).json(authResponse);
             }
             catch (error) {
                 return res.status(500).json({
                     ok: false,
-                    message: error.message
+                    message: error.message,
                 });
             }
         });
@@ -60,16 +61,13 @@ class AuthController {
                 if (!userToken)
                     return res.status(400).json({ message: "Token no válido" });
                 const token = userToken.split(" ")[1];
-                const newToken = yield this.authService.validateToken(token);
-                return res.status(200).json({
-                    ok: true,
-                    token: newToken
-                });
+                const userAndToken = yield this.authService.validateToken(token);
+                return res.status(200).json(userAndToken);
             }
             catch (error) {
                 return res.status(500).json({
                     ok: false,
-                    message: error.message
+                    message: error.message,
                 });
             }
         });

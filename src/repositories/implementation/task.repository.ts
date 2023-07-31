@@ -56,6 +56,25 @@ export class TaskRepository implements TaskRepositoryInterface {
     return Promise.all(tasksDto);
   }
 
+  public async getUserTasksByDate(idUser: string, idDate: string): Promise<TaskDto[]> {
+    const tasks: Task[] = await TaskModel.find({ idUser, idDate}).populate("idPriority").populate("idUser", "-password");
+
+    const tasksDto: Promise<TaskDto>[] = tasks.map(async (task: any) => {
+      const taskDto: TaskDto = {
+        _id: task._id,
+        title: task.title,
+        description: task.description,
+        deadline: task.deadline,
+        idDate: task.idDate,
+        priority: task.idPriority,
+        user: await task.idUser.populate("idRole"),
+      };
+      return taskDto;
+    });
+
+    return Promise.all(tasksDto);
+  }
+
   public async getTaskById(id: string): Promise<TaskDto> {
     const task: any | null = await TaskModel.findById(id);
     if (!task) throw new Error("La tarea no existe");

@@ -32,6 +32,7 @@ const taskSchema = new Schema(
     idDate: {
       type: String,
       required: true,
+      unique: false,
     },
 
     idUser: {

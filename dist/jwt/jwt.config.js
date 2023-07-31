@@ -18,23 +18,23 @@ class Token {
     constructor() { }
     static createJwtToken(payload) {
         return __awaiter(this, void 0, void 0, function* () {
-            return jsonwebtoken_1.default.sign({
-                user: payload,
-            }, this.seed, { expiresIn: this.expired });
+            return jsonwebtoken_1.default.sign({ user: payload }, this.seed, { expiresIn: this.expired });
         });
     }
     static validateToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                jsonwebtoken_1.default.verify(token, this.seed, (error, decoded) => {
+                jsonwebtoken_1.default.verify(token, this.seed, (error, decoded) => __awaiter(this, void 0, void 0, function* () {
+                    var _a;
                     if (error) {
                         reject(false);
                     }
                     else {
-                        const newToken = this.createJwtToken(decoded);
-                        resolve(newToken);
+                        const newToken = yield this.createJwtToken(decoded.user);
+                        const idUser = (_a = decoded === null || decoded === void 0 ? void 0 : decoded.user) === null || _a === void 0 ? void 0 : _a._id;
+                        resolve([newToken, idUser]);
                     }
-                });
+                }));
             });
         });
     }

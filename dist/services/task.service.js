@@ -52,6 +52,25 @@ class TaskService {
             }
         });
     }
+    getUserTasksByDate(idUser, idDate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userExists = yield this.userRepository.userExists(idUser);
+                if (!userExists)
+                    throw new Error("El usuario no existe");
+                const tasks = yield this.taskRepository.getUserTasksByDate(idUser, idDate);
+                const tasksResponse = {
+                    ok: true,
+                    message: "Tareas Encontradas",
+                    data: tasks,
+                };
+                return tasksResponse;
+            }
+            catch (error) {
+                throw new Error(error.message);
+            }
+        });
+    }
     getTaskById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

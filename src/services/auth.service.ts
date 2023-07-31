@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Role, RoleModel } from "../models/role";
-import { AuthResponse, LoginDto, RegisterDto } from "../dtos/auth.dto";
+import { AuthResponse, LoginDto, RegisterDto, TokenValidatorDto } from "../dtos/auth.dto";
 import { UserRepository } from "../repositories/implementation/user.repository";
 import { AuthRepository } from "../repositories/implementation/auth.repository";
 import { UserDto } from "../dtos/user.dto";
@@ -25,6 +25,7 @@ export class AuthService {
       if (!token) throw new Error("Usuario o contraseña incorrecta");
 
       const authResponse: AuthResponse = {
+        ok: true,
         token,
         user: userDto,
         message: "Login exitoso",
@@ -44,7 +45,7 @@ export class AuthService {
 
       const userUsernameExists: boolean =
         await this.userRepository.usernameExists(newUser.username);
-      if (userUsernameExists) throw new Error("El username ya está registrado");
+      if (userUsernameExists) throw new Error("El nombre de usuario ya está registrado");
 
       const userRole: Role | null = await RoleModel.findOne({ name: "user" });
       if (!userRole) throw new Error("No se pudo crear el usuario");
@@ -56,6 +57,7 @@ export class AuthService {
       if (!token) throw new Error("No se pudo crear el usuario");
 
       const authResponse: AuthResponse = {
+        ok: true,
         token,
         user: await this.userRepository.getUserByEmail(newUser.email),
         message: "Usuario creado exitosamente",
@@ -69,10 +71,15 @@ export class AuthService {
 
   public async validateToken(token: string) {
     try {
-      const newToken: string | null = await this.authRepository.validateToken(token);
-      if (!newToken) throw new Error("Token no válido");
+      const tokenResponse: TokenValidatorDto = await this.authRepository.validateToken(token);
+      if (!tokenResponse) throw new Error("Token no válido");
 
-      return newToken;
+      const userAndToken: any = {
+        ok: true,
+        token: tokenResponse.token,
+        user: tokenResponse.user,
+      };
+      return userAndToken;
     } catch (error: any) {
       throw new Error('Token no válido');
     }

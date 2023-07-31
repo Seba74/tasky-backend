@@ -47,6 +47,25 @@ export class TaskService {
     }
   }
 
+  public async getUserTasksByDate(idUser: string, idDate: string) {
+    try {
+
+      const userExists: boolean = await this.userRepository.userExists(idUser);
+      if (!userExists) throw new Error("El usuario no existe");
+
+      const tasks: TaskDto[] = await this.taskRepository.getUserTasksByDate(idUser, idDate);
+
+      const tasksResponse: CommonResponse = {
+        ok: true,
+        message: "Tareas Encontradas",
+        data: tasks,
+      };
+      return tasksResponse;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   public async getTaskById(id: string) {
     try {
       const taskExists: boolean = await this.taskRepository.taskExists(id);

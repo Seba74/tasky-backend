@@ -47,6 +47,22 @@ class TaskController {
             }
         });
     }
+    getUserTasksByDate(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { idUser, idDate } = req.params;
+                const taskResponse = yield this.taskService.getUserTasksByDate(idUser, idDate);
+                return res.status(200).json(taskResponse);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({
+                    ok: false,
+                    message: error.message,
+                });
+            }
+        });
+    }
     getAllTasks(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

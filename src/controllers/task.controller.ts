@@ -40,6 +40,21 @@ export class TaskController {
     }
   }
 
+  public async getUserTasksByDate(req: Request, res: Response) {
+    try{
+      const { idUser, idDate } = req.params;
+      const taskResponse : CommonResponse = await this.taskService.getUserTasksByDate(idUser, idDate);
+
+      return res.status(200).json(taskResponse);
+    }catch (error: any) {
+      console.error(error);
+      res.status(500).json({
+        ok: false,
+        message: error.message,
+      });
+    }
+  }
+
   public async getAllTasks(_req: Request, res: Response) {
     try{
       const taskResponse: CommonResponse = await this.taskService.getAllTasks();

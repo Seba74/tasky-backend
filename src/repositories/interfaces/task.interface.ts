@@ -5,6 +5,7 @@ export interface TaskRepositoryInterface {
     updateTask: (idTask: string, updateTaskDto: UpdateTaskDto) => Promise<TaskDto | null>;
     deleteTask: (idTask: string) => Promise<TaskDto | null>;
     getTasksByUserId: (idUser: string) => Promise<TaskDto[]>;
+    getUserTasksByDate: (idUser: string, date: string) => Promise<TaskDto[]>;
     getAllTasks: () => Promise<TaskDto[]>;
     getTaskById: (idTask: string) => Promise<TaskDto | null>;
     taskExists: (idTask: string) => Promise<boolean>;

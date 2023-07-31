@@ -35,7 +35,7 @@ router.get(
 router.get(
   "/level/:level",
   tokenAuthMiddleware, getPriorityByLevelValidator,
-  priorityController.getPriorityByName.bind(priorityController)
+  priorityController.getPriorityByLevel.bind(priorityController)
 );
 // Update Priority
 router.put(

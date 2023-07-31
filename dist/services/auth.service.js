@@ -29,6 +29,7 @@ class AuthService {
                 if (!token)
                     throw new Error("Usuario o contraseña incorrecta");
                 const authResponse = {
+                    ok: true,
                     token,
                     user: userDto,
                     message: "Login exitoso",
@@ -48,7 +49,7 @@ class AuthService {
                     throw new Error("El email ya está registrado");
                 const userUsernameExists = yield this.userRepository.usernameExists(newUser.username);
                 if (userUsernameExists)
-                    throw new Error("El username ya está registrado");
+                    throw new Error("El nombre de usuario ya está registrado");
                 const userRole = yield role_1.RoleModel.findOne({ name: "user" });
                 if (!userRole)
                     throw new Error("No se pudo crear el usuario");
@@ -58,6 +59,7 @@ class AuthService {
                 if (!token)
                     throw new Error("No se pudo crear el usuario");
                 const authResponse = {
+                    ok: true,
                     token,
                     user: yield this.userRepository.getUserByEmail(newUser.email),
                     message: "Usuario creado exitosamente",
@@ -72,10 +74,15 @@ class AuthService {
     validateToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const newToken = yield this.authRepository.validateToken(token);
-                if (!newToken)
+                const tokenResponse = yield this.authRepository.validateToken(token);
+                if (!tokenResponse)
                     throw new Error("Token no válido");
-                return newToken;
+                const userAndToken = {
+                    ok: true,
+                    token: tokenResponse.token,
+                    user: tokenResponse.user,
+                };
+                return userAndToken;
             }
             catch (error) {
                 throw new Error('Token no válido');

@@ -3,6 +3,7 @@ import { TaskController } from "../controllers/task.controller";
 // import { logMiddleware } from "../middleware/log";
 import { tokenAuthMiddleware } from "../middleware/token.auth";
 import { isAdminMiddleware } from "../middleware/isAdmin";
+import { getUserTasksByDateValidator } from '../validators/task.validators';
 import {
   createTaskValidator,
   getTaskByIdValidator,
@@ -35,6 +36,14 @@ router.get(
   tokenAuthMiddleware,
   getTasksByUserValidator,
   taskController.getTasksByUser.bind(taskController)
+);
+
+// Get Tasks per day by User Id
+router.get(
+  "/user/:idUser/date/:idDate",
+  tokenAuthMiddleware,
+  getUserTasksByDateValidator,
+  taskController.getUserTasksByDate.bind(taskController)
 );
 
 // Create Task

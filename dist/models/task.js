@@ -21,6 +21,7 @@ const taskSchema = new mongoose_1.Schema({
     idDate: {
         type: String,
         required: true,
+        unique: false,
     },
     idUser: {
         type: mongoose_1.Schema.Types.ObjectId,

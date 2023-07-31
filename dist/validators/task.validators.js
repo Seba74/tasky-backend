@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTaskValidator = exports.getTasksByUserValidator = exports.getTaskByIdValidator = exports.createTaskValidator = void 0;
+exports.getUserTasksByDateValidator = exports.updateTaskValidator = exports.getTasksByUserValidator = exports.getTaskByIdValidator = exports.createTaskValidator = void 0;
 const express_validator_1 = require("express-validator");
 const validate_helper_1 = require("../helpers/validate.helper");
 exports.createTaskValidator = [
@@ -22,5 +22,10 @@ exports.getTasksByUserValidator = [
 ];
 exports.updateTaskValidator = [
     (0, express_validator_1.check)('id', 'El id es requerido').not().isEmpty(),
+    (req, res, next) => (0, validate_helper_1.validateResult)(req, res, next)
+];
+exports.getUserTasksByDateValidator = [
+    (0, express_validator_1.check)('idUser', 'El id es requerido').not().isEmpty(),
+    (0, express_validator_1.check)('idDate', 'El id es requerido').not().isEmpty(),
     (req, res, next) => (0, validate_helper_1.validateResult)(req, res, next)
 ];

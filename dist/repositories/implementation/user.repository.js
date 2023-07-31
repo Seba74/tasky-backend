@@ -11,27 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRepository = void 0;
 const user_1 = require("../../models/user");
-const role_1 = require("../../models/role");
 class UserRepository {
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_1.UserModel.findById(id);
-            if (!user)
-                throw new Error("No se encontró el usuario");
-            const userDto = {
-                _id: user._id.transform.toString(),
-                name: user.name,
-                lastname: user.lastname,
-                username: user.username,
-                email: user.email,
-                role: yield role_1.RoleModel.findById(user.idRole),
-            };
-            return userDto;
-        });
-    }
-    getUserByUsername(username) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_1.UserModel.findOne({ username });
+            const user = yield user_1.UserModel.findById(id).populate("idRole");
             if (!user)
                 throw new Error("No se encontró el usuario");
             const userDto = {
@@ -40,14 +23,30 @@ class UserRepository {
                 lastname: user.lastname,
                 username: user.username,
                 email: user.email,
-                role: yield role_1.RoleModel.findById(user.idRole),
+                role: user.idRole
+            };
+            return userDto;
+        });
+    }
+    getUserByUsername(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_1.UserModel.findOne({ username }).populate("idRole");
+            if (!user)
+                throw new Error("No se encontró el usuario");
+            const userDto = {
+                _id: user._id,
+                name: user.name,
+                lastname: user.lastname,
+                username: user.username,
+                email: user.email,
+                role: user.idRole,
             };
             return userDto;
         });
     }
     getUserByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_1.UserModel.findOne({ email });
+            const user = yield user_1.UserModel.findOne({ email }).populate("idRole");
             if (!user)
                 throw new Error("No existe un usuario con ese email");
             const userDto = {
@@ -56,8 +55,9 @@ class UserRepository {
                 lastname: user.lastname,
                 username: user.username,
                 email: user.email,
-                role: yield role_1.RoleModel.findById(user.idRole),
+                role: user.idRole,
             };
+            console.log(userDto);
             return userDto;
         });
     }

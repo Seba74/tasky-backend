@@ -9,59 +9,59 @@ export class AuthController {
   }
 
   public async login(req: Request, res: Response) {
-    try{
-
+    try {
       const { email, password } = req.body;
       const loginData: LoginDto = { email, password };
 
-      const authResponse: AuthResponse = await this.authService.login(loginData);
-      return res.status(200).json({
-        ok: true,
-        authResponse
-      });
-    }catch(error: any){
+      const authResponse: AuthResponse = await this.authService.login(
+        loginData
+      );
+      return res.status(200).json(authResponse);
+    } catch (error: any) {
       return res.status(500).json({
         ok: false,
-        message: error.message
+        message: "Correo o contraseña incorrectos",
       });
     }
   }
 
   public async register(req: Request, res: Response) {
-    try{
+    try {
       const { name, lastname, username, email, password } = req.body;
 
-      const registerData: RegisterDto = { name, lastname, username, email, password, idRole: '' };
-      
-      const authResponse: AuthResponse = await this.authService.register(registerData);
-      return res.status(200).json({
-        ok: true,
-        authResponse
-      });
-    }catch(error: any){
+      const registerData: RegisterDto = {
+        name,
+        lastname,
+        username,
+        email,
+        password,
+        idRole: "",
+      };
+
+      const authResponse: AuthResponse = await this.authService.register(
+        registerData
+      );
+      return res.status(200).json(authResponse);
+    } catch (error: any) {
       return res.status(500).json({
         ok: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
 
   public async validateToken(req: Request, res: Response) {
-    try{
+    try {
       const userToken: string = req.headers["authorization"] || "";
-      if (!userToken)
-        return res.status(400).json({ message: "Token no válido" });
+      if (!userToken) return res.status(400).json({ message: "Token no válido" });
       const token: string = userToken.split(" ")[1];
 
-      const newToken: string = await this.authService.validateToken(token);
-      return res.status(200).json({
-        ok: true,
-        token: newToken
-      });
-    }catch(error: any){
+      const userAndToken: any = await this.authService.validateToken(token);
+      return res.status(200).json(userAndToken);
+    } catch (error: any) {
       return res.status(500).json({
         ok: false,
-        message: error.message
+        message: error.message,
       });
     }
   }

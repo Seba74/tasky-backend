@@ -27,7 +27,7 @@ class AuthRepository {
             if (!user.comparePassword(loginDto.password))
                 throw new Error("Usuario o contraseña incorrecta");
             const token = jwt_config_1.default.createJwtToken({
-                id: user._id,
+                _id: user._id,
                 username: user.name,
                 email: user.email,
                 role: yield role_1.RoleModel.findById(user.idRole),
@@ -39,7 +39,7 @@ class AuthRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield user_1.UserModel.create(registerDto);
             const token = jwt_config_1.default.createJwtToken({
-                id: user._id,
+                _id: user._id,
                 username: user.name,
                 email: user.email,
                 role: yield role_1.RoleModel.findById(user.idRole),
@@ -55,8 +55,13 @@ class AuthRepository {
     }
     validateToken(userToken) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newToken = yield jwt_config_1.default.validateToken(userToken);
-            return newToken;
+            const data = yield jwt_config_1.default.validateToken(userToken);
+            const user = yield user_1.UserModel.findById(data[1]).populate("idRole").select("-password");
+            const tokenValidatorDto = {
+                token: data[0],
+                user
+            };
+            return tokenValidatorDto;
         });
     }
 }

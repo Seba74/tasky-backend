@@ -65,6 +65,24 @@ class TaskRepository {
             return Promise.all(tasksDto);
         });
     }
+    getUserTasksByDate(idUser, idDate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const tasks = yield task_1.TaskModel.find({ idUser, idDate }).populate("idPriority").populate("idUser", "-password");
+            const tasksDto = tasks.map((task) => __awaiter(this, void 0, void 0, function* () {
+                const taskDto = {
+                    _id: task._id,
+                    title: task.title,
+                    description: task.description,
+                    deadline: task.deadline,
+                    idDate: task.idDate,
+                    priority: task.idPriority,
+                    user: yield task.idUser.populate("idRole"),
+                };
+                return taskDto;
+            }));
+            return Promise.all(tasksDto);
+        });
+    }
     getTaskById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const task = yield task_1.TaskModel.findById(id);
