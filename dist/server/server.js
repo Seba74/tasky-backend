@@ -27,7 +27,11 @@ class Server {
     configureMiddlewares() {
         this.app.use(body_parser_1.default.urlencoded({ extended: true }));
         this.app.use(body_parser_1.default.json());
-        this.app.use((0, cors_1.default)());
+        this.app.use((0, cors_1.default)({
+            origin: 'https://guidden.netlify.app',
+            optionsSuccessStatus: 200,
+            credentials: true
+        }));
     }
     configureRoutes() {
         this.app.use(this.api + "auth", auth_1.default);
