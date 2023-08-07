@@ -13,6 +13,8 @@ export class TaskRepository implements TaskRepositoryInterface {
       description: task.description,
       deadline: task.deadline,
       idDate: task.idDate,
+      is_completed: task.is_completed,
+      is_expired: task.is_expired,
       priority: task.idPriority,
       user: await task.idUser.populate("idRole"),
     };
@@ -28,6 +30,8 @@ export class TaskRepository implements TaskRepositoryInterface {
         description: task.description,
         deadline: task.deadline,
         idDate: task.idDate,
+        is_completed: task.is_completed,
+      is_expired: task.is_expired,
         priority: task.idPriority,
         user: await task.idUser.populate("idRole"),
       };
@@ -47,6 +51,8 @@ export class TaskRepository implements TaskRepositoryInterface {
         description: task.description,
         deadline: task.deadline,
         idDate: task.idDate,
+        is_completed: task.is_completed,
+      is_expired: task.is_expired,
         priority: task.idPriority,
         user: await task.idUser.populate("idRole"),
       };
@@ -66,6 +72,8 @@ export class TaskRepository implements TaskRepositoryInterface {
         description: task.description,
         deadline: task.deadline,
         idDate: task.idDate,
+        is_completed: task.is_completed,
+      is_expired: task.is_expired,
         priority: task.idPriority,
         user: await task.idUser.populate("idRole"),
       };
@@ -88,6 +96,8 @@ export class TaskRepository implements TaskRepositoryInterface {
       description: task.description,
       deadline: task.deadline,
       idDate: task.idDate,
+      is_completed: task.is_completed,
+      is_expired: task.is_expired,
       priority: task.idPriority,
       user: await task.idUser.populate("idRole"),
     };
@@ -98,12 +108,13 @@ export class TaskRepository implements TaskRepositoryInterface {
     const updatedTask: any | null = await TaskModel.findByIdAndUpdate(id, updateTaskDto, { new: true }).populate("idPriority").populate("idUser", "-password");
 
     if (!updatedTask) throw new Error("Error al actualizar la tarea");
-    
     const taskDto: TaskDto = {
       _id: updatedTask._id,
       title: updatedTask.title,
       description: updatedTask.description,
       deadline: updatedTask.deadline,
+      is_completed: updatedTask.is_completed,
+      is_expired: updatedTask.is_expired,
       idDate: updatedTask.idDate,
       priority: updatedTask.idPriority,
       user: await updatedTask.idUser.populate("idRole"),
@@ -122,6 +133,8 @@ export class TaskRepository implements TaskRepositoryInterface {
       title: deletedTask.title,
       description: deletedTask.description,
       deadline: deletedTask.deadline,
+      is_completed: deletedTask.is_completed,
+      is_expired: deletedTask.is_expired,
       idDate: deletedTask.idDate,
       priority: deletedTask.idPriority,
       user: await deletedTask.idUser.populate("idRole"),

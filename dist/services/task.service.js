@@ -119,9 +119,11 @@ class TaskService {
                     title: data.title || actualTask.title,
                     description: data.description || actualTask.description,
                     idDate: data.idDate || actualTask.idDate,
+                    is_completed: data.is_completed || actualTask.is_completed,
+                    is_expired: data.is_expired || actualTask.is_expired,
                     deadline: data.deadline || actualTask.deadline,
-                    idUser: actualTask.user._id,
-                    idPriority: actualTask.priority._id,
+                    idUser: data.idUser || actualTask.user._id,
+                    idPriority: data.idPriority || actualTask.priority._id,
                 };
                 const task = yield this.taskRepository.updateTask(id, taskToUpdate);
                 const taskResponse = {

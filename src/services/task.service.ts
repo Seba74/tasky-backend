@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
 import { TaskRepository } from "../repositories/implementation/task.repository";
 import { UserRepository } from "../repositories/implementation/user.repository";
-import { CreateTaskDto, TaskDto, UpdateTaskDto } from '../dtos/task.dto';
+import { CreateTaskDto, TaskDto, UpdateTaskDto } from "../dtos/task.dto";
 import { CommonResponse } from "../dtos/common.dto";
 
 export class TaskService {
@@ -20,7 +19,7 @@ export class TaskService {
         ok: true,
         message: "Tareas Encontradas",
         data: tasks,
-      }
+      };
 
       return tasksResponse;
     } catch (error: any) {
@@ -30,11 +29,12 @@ export class TaskService {
 
   public async getTasksByUser(idUser: string) {
     try {
-
       const userExists: boolean = await this.userRepository.userExists(idUser);
       if (!userExists) throw new Error("El usuario no existe");
 
-      const tasks: TaskDto[] = await this.taskRepository.getTasksByUserId(idUser);
+      const tasks: TaskDto[] = await this.taskRepository.getTasksByUserId(
+        idUser
+      );
 
       const tasksResponse: CommonResponse = {
         ok: true,
@@ -49,11 +49,13 @@ export class TaskService {
 
   public async getUserTasksByDate(idUser: string, idDate: string) {
     try {
-
       const userExists: boolean = await this.userRepository.userExists(idUser);
       if (!userExists) throw new Error("El usuario no existe");
 
-      const tasks: TaskDto[] = await this.taskRepository.getUserTasksByDate(idUser, idDate);
+      const tasks: TaskDto[] = await this.taskRepository.getUserTasksByDate(
+        idUser,
+        idDate
+      );
 
       const tasksResponse: CommonResponse = {
         ok: true,
@@ -77,7 +79,7 @@ export class TaskService {
         ok: true,
         message: "Tarea Encontrada",
         data: task,
-      }
+      };
       return taskResponse;
     } catch (error: any) {
       throw new Error(error.message);
@@ -86,17 +88,16 @@ export class TaskService {
 
   public async createTask(newTask: CreateTaskDto) {
     try {
-
       const userExists: boolean = await this.userRepository.userExists(newTask.idUser);
       if (!userExists) throw new Error("El usuario no existe");
 
-      const task: TaskDto = await this.taskRepository.createTask(newTask);
-
+      const task: TaskDto = await this.taskRepository.createTask(newTask);      
+      
       const taskResponse: CommonResponse = {
         ok: true,
         message: "Tarea Creada",
         data: task,
-      }
+      };
       return taskResponse;
     } catch (error: any) {
       throw new Error(error.message);
@@ -107,15 +108,16 @@ export class TaskService {
     try {
       const actualTask: TaskDto = await this.taskRepository.getTaskById(id);
       if (!actualTask) throw new Error("La tarea no existe");
-
-      const taskToUpdate : UpdateTaskDto = {
+      const taskToUpdate: UpdateTaskDto = {
         title: data.title || actualTask.title,
         description: data.description || actualTask.description,
         idDate: data.idDate || actualTask.idDate,
+        is_completed: data.is_completed || actualTask.is_completed,
+        is_expired: data.is_expired || actualTask.is_expired,
         deadline: data.deadline || actualTask.deadline,
-        idUser: actualTask.user._id,
-        idPriority: actualTask.priority._id,
-      }
+        idUser: data.idUser || actualTask.user._id,
+        idPriority: data.idPriority || actualTask.priority._id,
+      };
 
       const task: TaskDto = await this.taskRepository.updateTask(id, taskToUpdate);
 
@@ -123,7 +125,7 @@ export class TaskService {
         ok: true,
         message: "Tarea Actualizada",
         data: task,
-      }
+      };
 
       return taskResponse;
     } catch (error: any) {
@@ -133,7 +135,6 @@ export class TaskService {
 
   public async deleteTask(id: string) {
     try {
-
       const taskExists: boolean = await this.taskRepository.taskExists(id);
       if (!taskExists) throw new Error("La tarea no existe");
 
@@ -143,7 +144,7 @@ export class TaskService {
         ok: true,
         message: "Tarea Eliminada",
         data: task,
-      }
+      };
       return taskResponse;
     } catch (error: any) {
       throw new Error(error.message);

@@ -17,6 +17,20 @@ const prioritySchema = new mongoose_1.Schema({
         min: 1,
         unique: true,
     },
+    color: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true,
+        maxlength: 50,
+    },
+    color_code: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true,
+        maxlength: 50,
+    },
 }, {
     timestamps: true,
     versionKey: false,

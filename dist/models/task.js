@@ -12,11 +12,21 @@ const taskSchema = new mongoose_1.Schema({
     description: {
         type: String,
         trim: true,
-        maxlength: 50,
+        maxlength: 250,
     },
     deadline: {
         type: Date,
         required: true,
+    },
+    is_completed: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
+    is_expired: {
+        type: Boolean,
+        required: true,
+        default: false,
     },
     idDate: {
         type: String,

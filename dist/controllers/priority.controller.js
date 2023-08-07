@@ -81,8 +81,8 @@ class PriorityController {
     createPriority(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { name, level } = req.body;
-                const newPriority = { name, level };
+                const { name, level, color, color_code } = req.body;
+                const newPriority = { name, level, color, color_code };
                 const priorityResponse = yield this.priorityService.createPriority(newPriority);
                 return res.status(200).json(priorityResponse);
             }

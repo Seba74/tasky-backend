@@ -7,6 +7,10 @@ export const createPriorityValidator: RequestHandler[] = [
     check('name', 'El nombre debe tener al menos 3 caracteres').isLength({ min: 3 }),
     check('level', 'El nivel es requerido').not().isEmpty(),
     check('level', 'El nivel debe ser un numero').isNumeric(),
+    check('color', 'El color es requerido').not().isEmpty(),
+    check('color', 'El color debe tener al menos 3 caracteres').isLength({ min: 3 }),
+    check('color_code', 'El codigo de color es requerido').not().isEmpty(),
+    check('color_code', 'El codigo de color debe tener al menos 3 caracteres').isLength({ min: 3 }),
     (req: Request, res: Response, next: NextFunction) => validateResult(req, res, next)
 ];
 

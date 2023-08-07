@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { Role, RoleModel } from "../models/role";
 import { AuthResponse, LoginDto, RegisterDto, TokenValidatorDto } from "../dtos/auth.dto";
 import { UserRepository } from "../repositories/implementation/user.repository";

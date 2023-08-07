@@ -10,7 +10,7 @@ const priorityController = new priority_controller_1.PriorityController();
 // Create Priority
 router.post("/", token_auth_1.tokenAuthMiddleware, isAdmin_1.isAdminMiddleware, priority_validators_1.createPriorityValidator, priorityController.createPriority.bind(priorityController));
 // Get Priorities
-router.get("/", token_auth_1.tokenAuthMiddleware, isAdmin_1.isAdminMiddleware, priorityController.getPriorities.bind(priorityController));
+router.get("/", token_auth_1.tokenAuthMiddleware, priorityController.getPriorities.bind(priorityController));
 // Get Priority by Id
 router.get("/:id", token_auth_1.tokenAuthMiddleware, priority_validators_1.getPriorityByIdValidator, priorityController.getPriorityById.bind(priorityController));
 // Get Priority by Name

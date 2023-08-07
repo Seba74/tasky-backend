@@ -23,6 +23,8 @@ class TaskRepository {
                 description: task.description,
                 deadline: task.deadline,
                 idDate: task.idDate,
+                is_completed: task.is_completed,
+                is_expired: task.is_expired,
                 priority: task.idPriority,
                 user: yield task.idUser.populate("idRole"),
             };
@@ -39,6 +41,8 @@ class TaskRepository {
                     description: task.description,
                     deadline: task.deadline,
                     idDate: task.idDate,
+                    is_completed: task.is_completed,
+                    is_expired: task.is_expired,
                     priority: task.idPriority,
                     user: yield task.idUser.populate("idRole"),
                 };
@@ -57,6 +61,8 @@ class TaskRepository {
                     description: task.description,
                     deadline: task.deadline,
                     idDate: task.idDate,
+                    is_completed: task.is_completed,
+                    is_expired: task.is_expired,
                     priority: task.idPriority,
                     user: yield task.idUser.populate("idRole"),
                 };
@@ -75,6 +81,8 @@ class TaskRepository {
                     description: task.description,
                     deadline: task.deadline,
                     idDate: task.idDate,
+                    is_completed: task.is_completed,
+                    is_expired: task.is_expired,
                     priority: task.idPriority,
                     user: yield task.idUser.populate("idRole"),
                 };
@@ -96,6 +104,8 @@ class TaskRepository {
                 description: task.description,
                 deadline: task.deadline,
                 idDate: task.idDate,
+                is_completed: task.is_completed,
+                is_expired: task.is_expired,
                 priority: task.idPriority,
                 user: yield task.idUser.populate("idRole"),
             };
@@ -112,6 +122,8 @@ class TaskRepository {
                 title: updatedTask.title,
                 description: updatedTask.description,
                 deadline: updatedTask.deadline,
+                is_completed: updatedTask.is_completed,
+                is_expired: updatedTask.is_expired,
                 idDate: updatedTask.idDate,
                 priority: updatedTask.idPriority,
                 user: yield updatedTask.idUser.populate("idRole"),
@@ -129,6 +141,8 @@ class TaskRepository {
                 title: deletedTask.title,
                 description: deletedTask.description,
                 deadline: deletedTask.deadline,
+                is_completed: deletedTask.is_completed,
+                is_expired: deletedTask.is_expired,
                 idDate: deletedTask.idDate,
                 priority: deletedTask.idPriority,
                 user: yield deletedTask.idUser.populate("idRole"),

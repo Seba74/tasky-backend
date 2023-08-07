@@ -1,13 +1,6 @@
 import { PriorityDto } from "./priority.dto";
 import { UserDto } from "./user.dto";
 
-export interface TaskDataDto {
-    title: string;
-    description?: string;
-    idDate: string;
-    deadline: Date;
-}
-
 // create dto
 export interface CreateTaskDto {
     title: string;
@@ -24,6 +17,8 @@ export interface UpdateTaskDto {
     description?: string;
     idDate: string;
     deadline: Date;
+    is_completed: boolean;
+    is_expired: boolean;
     idPriority: any;
     idUser: any;
 }
@@ -33,6 +28,8 @@ export interface TaskDto {
     title: string;
     description?: string;
     idDate: string;
+    is_completed: boolean;
+    is_expired: boolean;
     deadline: Date;
     priority: PriorityDto;
     user: UserDto;

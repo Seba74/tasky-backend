@@ -113,6 +113,8 @@ class PriorityService {
                 const priorityToUpdate = {
                     name: data.name || actualPriority.name,
                     level: data.level || actualPriority.level,
+                    color: data.color || actualPriority.color,
+                    color_code: data.color_code || actualPriority.color_code,
                 };
                 const updatedPriority = yield this.priorityRepository.updatePriority(id, priorityToUpdate);
                 const priorityResponse = {

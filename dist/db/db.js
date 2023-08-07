@@ -17,7 +17,10 @@ const mongoose_1 = __importDefault(require("mongoose"));
 require("dotenv/config");
 const { MONGO_USER, MONGO_PASS, MONGO_PATH } = process.env;
 const connect = () => __awaiter(void 0, void 0, void 0, function* () {
-    mongoose_1.default.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASS}${MONGO_PATH}`);
+    mongoose_1.default.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASS}${MONGO_PATH}`, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
     mongoose_1.default.connection.on("connected", () => {
         console.log("DB is connected");
     });

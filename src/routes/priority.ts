@@ -16,7 +16,7 @@ router.post(
 // Get Priorities
 router.get(
   "/",
-  tokenAuthMiddleware, isAdminMiddleware,
+  tokenAuthMiddleware,
   priorityController.getPriorities.bind(priorityController)
 );
 // Get Priority by Id

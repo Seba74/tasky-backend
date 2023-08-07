@@ -102,6 +102,8 @@ export class PriorityService {
       const priorityToUpdate: UpdatePriorityDto = {
         name: data.name || actualPriority.name,
         level: data.level || actualPriority.level,
+        color: data.color || actualPriority.color,
+        color_code: data.color_code || actualPriority.color_code,
       }
       
       const updatedPriority: PriorityDto | null = await this.priorityRepository.updatePriority(id, priorityToUpdate);

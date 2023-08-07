@@ -57,7 +57,6 @@ class UserRepository {
                 email: user.email,
                 role: user.idRole,
             };
-            console.log(userDto);
             return userDto;
         });
     }

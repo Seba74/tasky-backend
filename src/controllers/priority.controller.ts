@@ -72,8 +72,8 @@ export class PriorityController {
 
   public async createPriority(req: Request, res: Response) {
     try{
-      const { name, level } = req.body;
-      const newPriority : CreatePriorityDto = { name, level };
+      const { name, level, color, color_code } = req.body;
+      const newPriority : CreatePriorityDto = { name, level, color, color_code };
       const priorityResponse : CommonResponse = await this.priorityService.createPriority(newPriority);
       
       return res.status(200).json(priorityResponse);

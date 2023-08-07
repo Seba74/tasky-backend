@@ -8,6 +8,10 @@ exports.createPriorityValidator = [
     (0, express_validator_1.check)('name', 'El nombre debe tener al menos 3 caracteres').isLength({ min: 3 }),
     (0, express_validator_1.check)('level', 'El nivel es requerido').not().isEmpty(),
     (0, express_validator_1.check)('level', 'El nivel debe ser un numero').isNumeric(),
+    (0, express_validator_1.check)('color', 'El color es requerido').not().isEmpty(),
+    (0, express_validator_1.check)('color', 'El color debe tener al menos 3 caracteres').isLength({ min: 3 }),
+    (0, express_validator_1.check)('color_code', 'El codigo de color es requerido').not().isEmpty(),
+    (0, express_validator_1.check)('color_code', 'El codigo de color debe tener al menos 3 caracteres').isLength({ min: 3 }),
     (req, res, next) => (0, validate_helper_1.validateResult)(req, res, next)
 ];
 exports.getPriorityByNameValidator = [

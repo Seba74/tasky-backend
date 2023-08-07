@@ -49,7 +49,6 @@ export class UserRepository implements UserRepositoryInterface {
       email: user.email,
       role: user.idRole,
     }
-    console.log(userDto);
     return userDto;
   }
 
