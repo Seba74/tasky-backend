@@ -27,7 +27,7 @@ class Server {
     configureMiddlewares() {
         this.app.use(body_parser_1.default.urlencoded({ extended: true }));
         this.app.use(body_parser_1.default.json());
-        this.app.use((0, cors_1.default)({ origin: true, credentials: true }));
+        this.app.use((0, cors_1.default)());
     }
     configureRoutes() {
         this.app.use(this.api + "auth", auth_1.default);
