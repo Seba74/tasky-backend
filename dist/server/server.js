@@ -28,7 +28,7 @@ class Server {
         this.app.use(body_parser_1.default.urlencoded({ extended: true }));
         this.app.use(body_parser_1.default.json());
         this.app.use((0, cors_1.default)({
-            origin: 'https://guidden.netlify.app',
+            origin: ['https://guidden.netlify.app', 'https://taskapp-53xk.onrender.com'],
             optionsSuccessStatus: 200,
             credentials: true
         }));
