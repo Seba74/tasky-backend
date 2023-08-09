@@ -27,7 +27,7 @@ export default class Server {
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(bodyParser.json());
     this.app.use(cors({
-      origin: ['https://guidden.netlify.app', 'https://stakyapp.web.app'],
+      origin: true,
       optionsSuccessStatus: 200,
       credentials: true
     }));
